@@ -6,6 +6,16 @@
 enum orientation { X = 0, Y = 1, };
 enum state { Empty = 0, Nought = 1, Cross = 2};
 
+class cell
+{
+public:
+	bool insertPiece(state move);
+	const state getPiece();
+private:
+	state piece{state::Empty};
+};
+
+
 class Grid
 {
 public:
@@ -23,7 +33,7 @@ private:
 	const int size [2] {3,3}; // {w,h}
 	int numContained{};
 	int maxContents;
-	std::vector<std::vector<state>> content;
+	std::vector<std::vector<cell>> content;
 
 	void printLine(bool fill);
 	void printEmptyLine();
