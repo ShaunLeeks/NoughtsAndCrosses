@@ -5,13 +5,13 @@
 #include "Piece.h"
 
 enum orientation { X = 0, Y = 1, };
-enum state { Empty = 0, Nought = 1, Cross = 2};
+
 
 class cell
 {
 public:
 	bool insertPiece(Piece move);
-	const state getPiece();
+	Piece getPiece();
 	bool isEmpty();
 private:
 	bool empty{ true };

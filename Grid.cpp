@@ -4,23 +4,6 @@
 
 void printContentRow(std::vector<cell> data);
 
-Piece stateToPiece(state move) {
-	Piece newPiece{ "Empty",' ' };
-	switch (move) {
-	case state::Nought:
-		newPiece = Piece{ "Nought",'0' };
-		break;
-	case state::Cross:
-		newPiece = Piece{ "Cross",'X' };
-		break;
-	}
-	return newPiece;
-}
-
-const char symbols[]{
-' ','0','X'
-};
-
 Grid::Grid()
 {
 	content.resize(size[Y]);
@@ -52,7 +35,7 @@ void Grid::draw()
 
 bool Grid::insertState(state move, unsigned int column, unsigned int row)
 {
-	Piece piece { stateToPiece(move) };
+	Piece piece(move);
 
 	if (piece == Piece())
 		return false;
@@ -72,9 +55,11 @@ bool Grid::isFull()
 
 bool Grid::matchRow(state move, unsigned int row)
 {
+	Piece piece(move);
+
 	for (cell item : content[row])
 	{
-		if (move != item.getPiece()) {
+		if (piece != item.getPiece()) {
 			return false;
 		}
 	}
@@ -83,9 +68,11 @@ bool Grid::matchRow(state move, unsigned int row)
 
 bool Grid::matchColumn(state move, unsigned int column)
 {
+	Piece piece(move);
+
 	for (auto row : content)
 	{
-		if (move != row[column].getPiece())
+		if (piece != row[column].getPiece())
 		{
 			return false;
 		}
@@ -95,10 +82,11 @@ bool Grid::matchColumn(state move, unsigned int column)
 
 bool Grid::matchLeftDiag(state move)
 {
+	Piece piece(move);
+
 	for (int x{}, y{ size[Y] - 1 }; x < size[X] && y >= 0 ; x++, y--)
 	{
-		auto temp{ content[x][y].getPiece() };
-		if (move != content[x][y].getPiece())
+		if (piece != content[x][y].getPiece())
 		{
 			return false;
 		}
@@ -108,9 +96,11 @@ bool Grid::matchLeftDiag(state move)
 
 bool Grid::matchRightDiag(state move)
 {
+	Piece piece(move);
+
 	for (int cell{}; cell < size[Y] && cell < size[X]; cell++)
 	{
-		if (move != content[cell][cell].getPiece())
+		if (piece != content[cell][cell].getPiece())
 		{
 			return false;
 		}
@@ -146,7 +136,7 @@ void printContentRow(std::vector<cell> rowData)
 {
 	for (unsigned int count{}; count < rowData.size(); count++)
 	{
-		std::cout << ' ' << symbols[rowData[count].getPiece()] << ' ';
+		std::cout << ' ' << rowData[count].getPiece().getSymbol() << ' ';
 		if (count < rowData.size() - 1) {
 			std::cout << '|';
 		}
@@ -166,17 +156,9 @@ bool cell::insertPiece(Piece move)
 	}
 }
 
-const state cell::getPiece()
+Piece cell::getPiece()
 {
-	if (empty) {
-		return state::Empty;
-	}
-	else if (piece.getSymbol() == 'X') {
-		return state::Cross;
-	}
-	else {
-		return state::Nought;
-	}
+	return piece;
 }
 
 bool cell::isEmpty()
