@@ -23,6 +23,7 @@ void tests()
     //ClearScreen();
     bool match;
     Grid test1{};
+    /*
     test1.insertState(state::Cross, 1, 1);
     test1.insertState(state::Nought, 2, 0);
     test1.insertState(state::Cross, 3, 0);
@@ -57,6 +58,7 @@ void tests()
     test5.insertState(state::Cross, 0, 2);
     test5.draw();
     match = test5.matchLeftDiag(state::Cross);
+    /**/
 }
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu

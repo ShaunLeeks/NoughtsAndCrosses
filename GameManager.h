@@ -1,16 +1,18 @@
 #pragma once
 #include "Grid.h"
-
-enum class PlayersTurn {PlayerOne, PlayerTwo};
+#include "Player.h"
 
 class GameManager
 {
 public:
+	GameManager();
 	void playGame();
 private:
 	Grid board;
-	PlayersTurn currentTurn { PlayersTurn::PlayerOne };
 	void makeMove();
 	bool checkIfWon();
+	Player playerOne;
+	Player playerTwo;
+	Player* curentPlayer = &playerOne;
 };
 

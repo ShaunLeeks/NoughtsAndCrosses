@@ -4,10 +4,6 @@
 
 void printContentRow(std::vector<cell> data);
 
-const char symbols[]{
-' ','0','X'
-};
-
 Grid::Grid()
 {
 	content.resize(size[Y]);
@@ -37,13 +33,13 @@ void Grid::draw()
 	}
 }
 
-bool Grid::insertState(state move, unsigned int column, unsigned int row)
+bool Grid::insertState(Piece move, unsigned int column, unsigned int row)
 {
-	if (move == state::Empty)
+	if (move == Piece())
 		return false;
 	if (column > size[X] - 1 || row > size[Y] - 1)
 		return false;
-	if (content[row][column].getPiece() != state::Empty)
+	if (!content[row][column].isEmpty())
 		return false;
 	content[row][column].insertPiece(move);
 	numContained++;
@@ -55,7 +51,7 @@ bool Grid::isFull()
 	return numContained == maxContents;
 }
 
-bool Grid::matchRow(state move, unsigned int row)
+bool Grid::matchRow(Piece move, unsigned int row)
 {
 	for (cell item : content[row])
 	{
@@ -66,7 +62,7 @@ bool Grid::matchRow(state move, unsigned int row)
 	return true;
 }
 
-bool Grid::matchColumn(state move, unsigned int column)
+bool Grid::matchColumn(Piece move, unsigned int column)
 {
 	for (auto row : content)
 	{
@@ -78,11 +74,10 @@ bool Grid::matchColumn(state move, unsigned int column)
 	return true;
 }
 
-bool Grid::matchLeftDiag(state move)
+bool Grid::matchLeftDiag(Piece move)
 {
 	for (int x{}, y{ size[Y] - 1 }; x < size[X] && y >= 0 ; x++, y--)
 	{
-		auto temp{ content[x][y].getPiece() };
 		if (move != content[x][y].getPiece())
 		{
 			return false;
@@ -91,7 +86,7 @@ bool Grid::matchLeftDiag(state move)
 	return true;
 }
 
-bool Grid::matchRightDiag(state move)
+bool Grid::matchRightDiag(Piece move)
 {
 	for (int cell{}; cell < size[Y] && cell < size[X]; cell++)
 	{
@@ -131,7 +126,7 @@ void printContentRow(std::vector<cell> rowData)
 {
 	for (unsigned int count{}; count < rowData.size(); count++)
 	{
-		std::cout << ' ' << symbols[rowData[count].getPiece()] << ' ';
+		std::cout << ' ' << rowData[count].getPiece().getSymbol() << ' ';
 		if (count < rowData.size() - 1) {
 			std::cout << '|';
 		}
@@ -139,10 +134,11 @@ void printContentRow(std::vector<cell> rowData)
 	std::cout << "\n";
 }
 
-bool cell::insertPiece(state move)
+bool cell::insertPiece(Piece move)
 {
-	if (piece == state::Empty) {
+	if (empty) {
 		piece = move;
+		empty = false;
 		return true;
 	}
 	else {
@@ -150,7 +146,12 @@ bool cell::insertPiece(state move)
 	}
 }
 
-const state cell::getPiece()
+Piece cell::getPiece()
 {
 	return piece;
+}
+
+bool cell::isEmpty()
+{
+	return empty;
 }

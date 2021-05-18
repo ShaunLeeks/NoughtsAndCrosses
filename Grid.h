@@ -2,17 +2,20 @@
 #include <vector>
 #include <memory>
 #include <array>
+#include "Piece.h"
 
 enum orientation { X = 0, Y = 1, };
-enum state { Empty = 0, Nought = 1, Cross = 2};
+
 
 class cell
 {
 public:
-	bool insertPiece(state move);
-	const state getPiece();
+	bool insertPiece(Piece move);
+	Piece getPiece();
+	bool isEmpty();
 private:
-	state piece{state::Empty};
+	bool empty{ true };
+	Piece piece;
 };
 
 
@@ -22,12 +25,12 @@ public:
 	Grid();
 	std::tuple<int, int> getSize();
 	void draw();
-	bool insertState(state move, unsigned int column, unsigned int row);
+	bool insertState(Piece move, unsigned int column, unsigned int row);
 	bool isFull();
-	bool matchRow( state move, unsigned int row);
-	bool matchColumn(state move, unsigned int column);
-	bool matchLeftDiag(state move);
-	bool matchRightDiag(state move);
+	bool matchRow(Piece move, unsigned int row);
+	bool matchColumn(Piece move, unsigned int column);
+	bool matchLeftDiag(Piece move);
+	bool matchRightDiag(Piece move);
 
 private:	
 	const int size [2] {3,3}; // {w,h}
