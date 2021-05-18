@@ -33,17 +33,15 @@ void Grid::draw()
 	}
 }
 
-bool Grid::insertState(state move, unsigned int column, unsigned int row)
+bool Grid::insertState(Piece move, unsigned int column, unsigned int row)
 {
-	Piece piece(move);
-
-	if (piece == Piece())
+	if (move == Piece())
 		return false;
 	if (column > size[X] - 1 || row > size[Y] - 1)
 		return false;
 	if (!content[row][column].isEmpty())
 		return false;
-	content[row][column].insertPiece(piece);
+	content[row][column].insertPiece(move);
 	numContained++;
 	return true;
 }
@@ -53,26 +51,22 @@ bool Grid::isFull()
 	return numContained == maxContents;
 }
 
-bool Grid::matchRow(state move, unsigned int row)
+bool Grid::matchRow(Piece move, unsigned int row)
 {
-	Piece piece(move);
-
 	for (cell item : content[row])
 	{
-		if (piece != item.getPiece()) {
+		if (move != item.getPiece()) {
 			return false;
 		}
 	}
 	return true;
 }
 
-bool Grid::matchColumn(state move, unsigned int column)
+bool Grid::matchColumn(Piece move, unsigned int column)
 {
-	Piece piece(move);
-
 	for (auto row : content)
 	{
-		if (piece != row[column].getPiece())
+		if (move != row[column].getPiece())
 		{
 			return false;
 		}
@@ -80,13 +74,11 @@ bool Grid::matchColumn(state move, unsigned int column)
 	return true;
 }
 
-bool Grid::matchLeftDiag(state move)
+bool Grid::matchLeftDiag(Piece move)
 {
-	Piece piece(move);
-
 	for (int x{}, y{ size[Y] - 1 }; x < size[X] && y >= 0 ; x++, y--)
 	{
-		if (piece != content[x][y].getPiece())
+		if (move != content[x][y].getPiece())
 		{
 			return false;
 		}
@@ -94,13 +86,11 @@ bool Grid::matchLeftDiag(state move)
 	return true;
 }
 
-bool Grid::matchRightDiag(state move)
+bool Grid::matchRightDiag(Piece move)
 {
-	Piece piece(move);
-
 	for (int cell{}; cell < size[Y] && cell < size[X]; cell++)
 	{
-		if (piece != content[cell][cell].getPiece())
+		if (move != content[cell][cell].getPiece())
 		{
 			return false;
 		}

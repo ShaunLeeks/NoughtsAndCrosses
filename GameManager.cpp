@@ -4,6 +4,18 @@
 
 void ClearScreen();
 
+GameManager::GameManager()
+{
+	std::cout << "Player One what is your name?" << std::endl;
+	std::string player1Name;
+	std::cin >> player1Name;
+	std::cout << "Player Two what is your name?" << std::endl;
+	std::string player2Name;
+	std::cin >> player2Name;
+	playerOne = Player{ player1Name, Piece{"Nought",'0' } };
+	playerTwo = Player{ player2Name, Piece{"Nought",'X' } };
+}
+
 void GameManager::playGame()
 {
 	bool playerWon{ false };
@@ -18,13 +30,13 @@ void GameManager::playGame()
 		if (!playerWon)
 		{
 			gameOver = board.isFull();
-			if (currentTurn == PlayersTurn::PlayerOne)
+			if (curentPlayer == &playerOne)
 			{
-				currentTurn = PlayersTurn::PlayerTwo;
+				curentPlayer = &playerTwo;
 			}
 			else
 			{
-				currentTurn = PlayersTurn::PlayerOne;
+				curentPlayer = &playerOne;
 			}
 		}
 	}
@@ -33,7 +45,7 @@ void GameManager::playGame()
 	board.draw();
 	if (playerWon)
 	{
-		std::cout << (currentTurn == PlayersTurn::PlayerOne ? "Player One" : "Player Two") << " has Won!." << std::endl;
+		std::cout << curentPlayer->getname() << " has Won!." << std::endl;
 	}else
 	{
 		std::cout << "Draw!" << std::endl;
@@ -47,14 +59,14 @@ void GameManager::makeMove()
 	do
 	{
 		ClearScreen();
-		std::cout << "It's " << (currentTurn == PlayersTurn::PlayerOne ? "Player One" : "Player Two") << "'s turn." << std::endl;
+		std::cout << "It's " << curentPlayer->getname() << "'s turn." << std::endl;
 		if (inValidMove)
 		{
 			std::cout << "Invalid move entered please try again." << std::endl;
 		}
 		board.draw();
 		std::cout << "Plase enter the coordinates where you would like to place your "
-			<< (currentTurn == PlayersTurn::PlayerOne ? "Nought." : "Cross.") << std::endl;
+			<< curentPlayer->getPiece().getSymbol() << '.' << std::endl;
 		std::cout << "Enter the coordinates in the format \"x y\" where 'x' is the column and 'y' is the row of choice." << std::endl;
 		std::cout << "And \"0 0\" is the bottom left cell." << std::endl;
 		std::cout << "And press enter to confirm." << std::endl;
@@ -70,7 +82,7 @@ void GameManager::makeMove()
 			inValidMove = true;
 		}
 		else {
-			bool test = !board.insertState(currentTurn == PlayersTurn::PlayerOne ? state::Nought : state::Cross, column, row);
+			bool test = !board.insertState(curentPlayer->getPiece(), column, row);
 			inValidMove = test;
 		}
 	} while (inValidMove);
@@ -78,27 +90,26 @@ void GameManager::makeMove()
 
 bool GameManager::checkIfWon()
 {
-	state lookingFor{ currentTurn == PlayersTurn::PlayerOne ? state::Nought : state::Cross };
 	auto size{ board.getSize() };
 
 	bool hasWon{ false };
-	if (board.matchLeftDiag(lookingFor))
+	if (board.matchLeftDiag(curentPlayer->getPiece()))
 	{
 		return true;
 	}
-	if (board.matchRightDiag(lookingFor))
+	if (board.matchRightDiag(curentPlayer->getPiece()))
 	{
 		return true;
 	}
 	for (int x{}; x < std::get<Y>(size); x++)
 	{ 
-		if (board.matchRow(lookingFor, x)) {
+		if (board.matchRow(curentPlayer->getPiece(), x)) {
 			return true;
 		}
 	}
 	for (int y{}; y < std::get<X>(size); y++)
 	{
-		if (board.matchColumn(lookingFor, y))
+		if (board.matchColumn(curentPlayer->getPiece(), y))
 		{
 			return true;
 		}
