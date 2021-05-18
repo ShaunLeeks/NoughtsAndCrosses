@@ -2,6 +2,7 @@
 #include <vector>
 #include <memory>
 #include <array>
+#include "Piece.h"
 
 enum orientation { X = 0, Y = 1, };
 enum state { Empty = 0, Nought = 1, Cross = 2};
@@ -9,10 +10,12 @@ enum state { Empty = 0, Nought = 1, Cross = 2};
 class cell
 {
 public:
-	bool insertPiece(state move);
+	bool insertPiece(Piece move);
 	const state getPiece();
+	bool isEmpty();
 private:
-	state piece{state::Empty};
+	bool empty{ true };
+	Piece piece;
 };
 
 

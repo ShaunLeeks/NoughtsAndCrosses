@@ -4,6 +4,19 @@
 
 void printContentRow(std::vector<cell> data);
 
+Piece stateToPiece(state move) {
+	Piece newPiece{ "Empty",' ' };
+	switch (move) {
+	case state::Nought:
+		newPiece = Piece{ "Nought",'0' };
+		break;
+	case state::Cross:
+		newPiece = Piece{ "Cross",'X' };
+		break;
+	}
+	return newPiece;
+}
+
 const char symbols[]{
 ' ','0','X'
 };
@@ -39,13 +52,15 @@ void Grid::draw()
 
 bool Grid::insertState(state move, unsigned int column, unsigned int row)
 {
-	if (move == state::Empty)
+	Piece piece { stateToPiece(move) };
+
+	if (piece == Piece())
 		return false;
 	if (column > size[X] - 1 || row > size[Y] - 1)
 		return false;
-	if (content[row][column].getPiece() != state::Empty)
+	if (!content[row][column].isEmpty())
 		return false;
-	content[row][column].insertPiece(move);
+	content[row][column].insertPiece(piece);
 	numContained++;
 	return true;
 }
@@ -139,10 +154,11 @@ void printContentRow(std::vector<cell> rowData)
 	std::cout << "\n";
 }
 
-bool cell::insertPiece(state move)
+bool cell::insertPiece(Piece move)
 {
-	if (piece == state::Empty) {
+	if (empty) {
 		piece = move;
+		empty = false;
 		return true;
 	}
 	else {
@@ -152,5 +168,18 @@ bool cell::insertPiece(state move)
 
 const state cell::getPiece()
 {
-	return piece;
+	if (empty) {
+		return state::Empty;
+	}
+	else if (piece.getSymbol() == 'X') {
+		return state::Cross;
+	}
+	else {
+		return state::Nought;
+	}
+}
+
+bool cell::isEmpty()
+{
+	return empty;
 }
