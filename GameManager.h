@@ -11,8 +11,8 @@ private:
 	Grid board;
 	void makeMove();
 	bool checkIfWon();
-	Player playerOne;
-	Player playerTwo;
-	Player* curentPlayer = &playerOne;
+	std::shared_ptr<Player> playerOne;
+	std::shared_ptr<Player> playerTwo;
+	std::shared_ptr<Player> curentPlayer;
 };
 

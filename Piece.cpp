@@ -1,19 +1,15 @@
 #include "Piece.h"
 
-Piece::Piece():
-	name()
-{
-	symbol = ' ';
-}
-
 Piece::Piece(std::string pieceName, char pieceSymble):
 name(std::move(pieceName)), symbol(std::move(pieceSymble))
 {}
 
-const std::string Piece::getName()
+Piece::Piece(const Piece & other): name(other.name), symbol(other.symbol)
+{}
+
+const std::string & Piece::getName()
 {
-	std::string temp = name;
-	return temp;
+	return name;
 }
 
 const char Piece::getSymbol()

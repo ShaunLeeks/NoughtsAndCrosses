@@ -1,16 +1,15 @@
 #pragma once
 #include <string>
 #include "Piece.h"
+#include <memory>
 class Player
 {
 public:
-	Player() = default;
-	Player(std::string pName, Piece pPiece) :
-		name(std::move(pName)), piece(std::move(pPiece)) {};
+	Player(std::string pName, Piece pPiece);
 	const std::string getname();
-	Piece getPiece();
+	std::shared_ptr<Piece> getPiece();
 private:
 	std::string name;
-	Piece piece;
+	std::shared_ptr<Piece> piece;
 };
 

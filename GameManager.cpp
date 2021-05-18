@@ -12,8 +12,9 @@ GameManager::GameManager()
 	std::cout << "Player Two what is your name?" << std::endl;
 	std::string player2Name;
 	std::cin >> player2Name;
-	playerOne = Player{ player1Name, Piece{"Nought",'0' } };
-	playerTwo = Player{ player2Name, Piece{"Nought",'X' } };
+	playerOne = std::make_shared<Player>(player1Name, Piece{ "Nought",'0' });
+	playerTwo = std::make_shared<Player>(player2Name, Piece{ "Cross",'X' });
+	curentPlayer = playerOne;
 }
 
 void GameManager::playGame()
@@ -30,13 +31,13 @@ void GameManager::playGame()
 		if (!playerWon)
 		{
 			gameOver = board.isFull();
-			if (curentPlayer == &playerOne)
+			if (curentPlayer == playerOne)
 			{
-				curentPlayer = &playerTwo;
+				curentPlayer = playerTwo;
 			}
 			else
 			{
-				curentPlayer = &playerOne;
+				curentPlayer = playerOne;
 			}
 		}
 	}
@@ -66,7 +67,7 @@ void GameManager::makeMove()
 		}
 		board.draw();
 		std::cout << "Plase enter the coordinates where you would like to place your "
-			<< curentPlayer->getPiece().getSymbol() << '.' << std::endl;
+			<< curentPlayer->getPiece().get()->getSymbol() << '.' << std::endl;
 		std::cout << "Enter the coordinates in the format \"x y\" where 'x' is the column and 'y' is the row of choice." << std::endl;
 		std::cout << "And \"0 0\" is the bottom left cell." << std::endl;
 		std::cout << "And press enter to confirm." << std::endl;
@@ -82,7 +83,7 @@ void GameManager::makeMove()
 			inValidMove = true;
 		}
 		else {
-			bool test = !board.insertState(curentPlayer->getPiece(), column, row);
+			bool test = !board.insertState(curentPlayer.get()->getPiece(), column, row);
 			inValidMove = test;
 		}
 	} while (inValidMove);
@@ -90,26 +91,23 @@ void GameManager::makeMove()
 
 bool GameManager::checkIfWon()
 {
-	auto size{ board.getSize() };
-
-	bool hasWon{ false };
-	if (board.matchLeftDiag(curentPlayer->getPiece()))
+	if (board.matchLeftDiag(curentPlayer.get()->getPiece()))
 	{
 		return true;
 	}
-	if (board.matchRightDiag(curentPlayer->getPiece()))
+	if (board.matchRightDiag(curentPlayer.get()->getPiece()))
 	{
 		return true;
 	}
-	for (int x{}; x < std::get<Y>(size); x++)
+	for (int x{}; x < std::get<Y>(board.getSize()); x++)
 	{ 
-		if (board.matchRow(curentPlayer->getPiece(), x)) {
+		if (board.matchRow(curentPlayer.get()->getPiece(), x)) {
 			return true;
 		}
 	}
-	for (int y{}; y < std::get<X>(size); y++)
+	for (int y{}; y < std::get<X>(board.getSize()); y++)
 	{
-		if (board.matchColumn(curentPlayer->getPiece(), y))
+		if (board.matchColumn(curentPlayer.get()->getPiece(), y))
 		{
 			return true;
 		}

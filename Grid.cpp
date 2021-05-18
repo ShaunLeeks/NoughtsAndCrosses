@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-void printContentRow(std::vector<cell> data);
+void printContentRow(std::vector<Cell> data);
 
 Grid::Grid()
 {
@@ -33,10 +33,8 @@ void Grid::draw()
 	}
 }
 
-bool Grid::insertState(Piece move, unsigned int column, unsigned int row)
+bool Grid::insertState(std::shared_ptr<Piece> move, unsigned int column, unsigned int row)
 {
-	if (move == Piece())
-		return false;
 	if (column > size[X] - 1 || row > size[Y] - 1)
 		return false;
 	if (!content[row][column].isEmpty())
@@ -51,9 +49,9 @@ bool Grid::isFull()
 	return numContained == maxContents;
 }
 
-bool Grid::matchRow(Piece move, unsigned int row)
+bool Grid::matchRow(std::shared_ptr<Piece> move, unsigned int row)
 {
-	for (cell item : content[row])
+	for (Cell item : content[row])
 	{
 		if (move != item.getPiece()) {
 			return false;
@@ -62,7 +60,7 @@ bool Grid::matchRow(Piece move, unsigned int row)
 	return true;
 }
 
-bool Grid::matchColumn(Piece move, unsigned int column)
+bool Grid::matchColumn(std::shared_ptr<Piece> move, unsigned int column)
 {
 	for (auto row : content)
 	{
@@ -74,7 +72,7 @@ bool Grid::matchColumn(Piece move, unsigned int column)
 	return true;
 }
 
-bool Grid::matchLeftDiag(Piece move)
+bool Grid::matchLeftDiag(std::shared_ptr<Piece> move)
 {
 	for (int x{}, y{ size[Y] - 1 }; x < size[X] && y >= 0 ; x++, y--)
 	{
@@ -86,7 +84,7 @@ bool Grid::matchLeftDiag(Piece move)
 	return true;
 }
 
-bool Grid::matchRightDiag(Piece move)
+bool Grid::matchRightDiag(std::shared_ptr<Piece> move)
 {
 	for (int cell{}; cell < size[Y] && cell < size[X]; cell++)
 	{
@@ -122,11 +120,11 @@ void Grid::printEmptyLine()
 	printLine(false);
 }
 
-void printContentRow(std::vector<cell> rowData)
+void printContentRow(std::vector<Cell> rowData)
 {
 	for (unsigned int count{}; count < rowData.size(); count++)
 	{
-		std::cout << ' ' << rowData[count].getPiece().getSymbol() << ' ';
+		std::cout << ' ' << rowData[count].getPiece().get()->getSymbol() << ' ';
 		if (count < rowData.size() - 1) {
 			std::cout << '|';
 		}
@@ -134,7 +132,7 @@ void printContentRow(std::vector<cell> rowData)
 	std::cout << "\n";
 }
 
-bool cell::insertPiece(Piece move)
+bool Cell::insertPiece(std::shared_ptr<Piece> move)
 {
 	if (empty) {
 		piece = move;
@@ -146,12 +144,12 @@ bool cell::insertPiece(Piece move)
 	}
 }
 
-Piece cell::getPiece()
+std::shared_ptr<Piece> Cell::getPiece()
 {
 	return piece;
 }
 
-bool cell::isEmpty()
+bool Cell::isEmpty()
 {
 	return empty;
 }

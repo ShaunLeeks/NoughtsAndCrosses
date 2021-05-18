@@ -7,15 +7,15 @@
 enum orientation { X = 0, Y = 1, };
 
 
-class cell
+class Cell
 {
 public:
-	bool insertPiece(Piece move);
-	Piece getPiece();
+	bool insertPiece(std::shared_ptr<Piece> move);
+	std::shared_ptr<Piece> getPiece();
 	bool isEmpty();
 private:
 	bool empty{ true };
-	Piece piece;
+	std::shared_ptr<Piece> piece = std::make_shared<Piece>("", ' ');
 };
 
 
@@ -25,18 +25,18 @@ public:
 	Grid();
 	std::tuple<int, int> getSize();
 	void draw();
-	bool insertState(Piece move, unsigned int column, unsigned int row);
+	bool insertState(std::shared_ptr<Piece> move, unsigned int column, unsigned int row);
 	bool isFull();
-	bool matchRow(Piece move, unsigned int row);
-	bool matchColumn(Piece move, unsigned int column);
-	bool matchLeftDiag(Piece move);
-	bool matchRightDiag(Piece move);
+	bool matchRow(std::shared_ptr<Piece> move, unsigned int row);
+	bool matchColumn(std::shared_ptr<Piece> move, unsigned int column);
+	bool matchLeftDiag(std::shared_ptr<Piece> move);
+	bool matchRightDiag(std::shared_ptr<Piece> move);
 
 private:	
 	const int size [2] {3,3}; // {w,h}
 	int numContained{};
 	int maxContents;
-	std::vector<std::vector<cell>> content;
+	std::vector<std::vector<Cell>> content;
 
 	void printLine(bool fill);
 	void printEmptyLine();
