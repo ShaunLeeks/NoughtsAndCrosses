@@ -8,7 +8,6 @@ public:
 	Piece(const Piece & other);
 	const std::string & getName();
 	const char getSymbol();
-	bool operator==(const Piece);
 
 private:
 	const std::string name {""};

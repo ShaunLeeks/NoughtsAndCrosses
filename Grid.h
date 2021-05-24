@@ -11,7 +11,7 @@ class Cell
 {
 public:
 	bool insertPiece(std::shared_ptr<Piece> move);
-	std::shared_ptr<Piece> getPiece();
+	const std::shared_ptr<Piece> getPiece();
 	bool isEmpty();
 private:
 	bool empty{ true };

@@ -144,7 +144,7 @@ bool Cell::insertPiece(std::shared_ptr<Piece> move)
 	}
 }
 
-std::shared_ptr<Piece> Cell::getPiece()
+const std::shared_ptr<Piece> Cell::getPiece()
 {
 	return piece;
 }

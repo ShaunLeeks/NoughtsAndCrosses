@@ -16,8 +16,3 @@ const char Piece::getSymbol()
 {
 	return symbol;
 }
-
-bool Piece::operator==(const Piece other)
-{
-	return (name == other.name && symbol == other.symbol);
-}
